@@ -96,7 +96,7 @@ const setInWindow = require('setInWindow');
 const makeNumber = require('makeNumber');
 
 // Versioned, immutable build served by jsDelivr from the public GitHub repo.
-const SCRIPT_URL = 'https://cdn.jsdelivr.net/gh/HelloGekko/UTM-Grabber@v0.1.0/src/utm-builder.js';
+const SCRIPT_URL = 'https://cdn.jsdelivr.net/gh/HelloGekko/UTM-Grabber@v0.1.0/dist/utm-builder.min.js';
 
 const config = {
   cookieDays: makeNumber(data.cookieDays) || 90,

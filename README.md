@@ -115,13 +115,39 @@ Pas het `CONFIG`-blok bovenin de tag aan:
 ## Repo-structuur
 
 ```
-src/utm-builder.js        Leesbare broncode / engine (de waarheid; via jsDelivr geladen)
-template.tpl              GTM Gallery-template (dunne loader die de engine inlaadt)
-metadata.yaml             Gallery-metadata (homepage, documentatie, versies)
-LICENSE                   Apache-2.0
-gtm/custom-html-tag.html  Zelfstandige variant om in een Custom HTML-tag te plakken
-docs/                     Setup- en testdocumentatie
+src/utm-builder.js          Leesbare broncode / engine (de waarheid)
+dist/utm-builder.min.js     Geminificeerde build (via jsDelivr geladen door de template)
+template.tpl                GTM Gallery-template (dunne loader die de engine inlaadt)
+metadata.yaml               Gallery-metadata (homepage, documentatie, versies)
+LICENSE                     Apache-2.0
+package.json                Build- (terser) en testscripts
+gtm/custom-html-tag.html    Zelfstandige variant om in een Custom HTML-tag te plakken
+assets/                     Listing-icoon (assets/icon.png)
+test/browser.test.js        End-to-end browsertest (Playwright)
+docs/                       Documentatie (zie hieronder)
 ```
+
+## Bouwen & testen
+
+```bash
+npm install
+npm run build   # src/utm-builder.js -> dist/utm-builder.min.js (terser)
+npm test        # end-to-end browsertest
+```
+
+Na een wijziging aan de engine: opnieuw builden, een nieuwe versie-tag zetten
+(`v0.1.1`) en die tag bijwerken in zowel `template.tpl` (jsDelivr-URL) als
+`metadata.yaml`.
+
+## Documentatie
+
+- [`docs/form-recipes.md`](docs/form-recipes.md) — per formulier-tool (Gravity,
+  Elementor, Fluent, WPForms, CF7) de UTM's uitlezen.
+- [`docs/ga4.md`](docs/ga4.md) — UTM's als event-parameters / custom dimensions
+  naar GA4 sturen.
+- [`docs/testing.md`](docs/testing.md) — rooktest en QA-aandachtspunten.
+- [`docs/self-contained-gallery.md`](docs/self-contained-gallery.md) — waarom de
+  Gallery-template een extern script laadt en welke alternatieven er zijn.
 
 ## Status
 

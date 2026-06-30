@@ -1,0 +1,16 @@
+{
+  "name": "hellogekko-utm-tracker",
+  "version": "0.1.0",
+  "description": "Keep UTM parameters and ad click IDs alive across a visit so forms can read them from the URL. Google Tag Manager template + engine.",
+  "homepage": "https://hellogekko.nl/product/utm-tracker",
+  "license": "Apache-2.0",
+  "author": "HelloGekko",
+  "scripts": {
+    "build": "terser src/utm-builder.js --compress --mangle --comments '/^!/' -o dist/utm-builder.min.js",
+    "test": "node test/browser.test.js"
+  },
+  "devDependencies": {
+    "terser": "^5.0.0",
+    "playwright-core": "^1.40.0"
+  }
+}
