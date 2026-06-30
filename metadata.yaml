@@ -1,0 +1,5 @@
+homepage: "https://hellogekko.nl/product/utm-tracker"
+documentation: "https://github.com/HelloGekko/UTM-Grabber/blob/main/README.md"
+versions:
+  - sha: d837c14011a55afea879d95e4e3be088bb9f4e8d
+    changeNotes: Initial release. Captures UTM parameters and ad click IDs, stores first- and last-touch in a first-party cookie, keeps the parameters in the URL via link decoration and address-bar rewriting, and pushes values to the dataLayer.

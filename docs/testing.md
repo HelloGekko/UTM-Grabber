@@ -1,5 +1,17 @@
 # UTM Builder testen
 
+## Geautomatiseerde browsertest
+
+In `test/browser.test.js` staat een end-to-end test die de engine in een echte
+Chromium draait en capture, link-decoration, `replaceState`, de dataLayer-push en
+de cookie-fallback controleert.
+
+```bash
+npm i playwright-core
+node test/browser.test.js          # of: CHROME_BIN=/pad/naar/chrome node test/browser.test.js
+```
+
+
 ## Snelle rooktest (zonder GTM)
 
 1. Open je site met test-parameters:
