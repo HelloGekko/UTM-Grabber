@@ -1,11 +1,19 @@
-# UTM Builder
+# HelloGekko UTM tracker
 
 Houd marketing-attributie (UTM's + ad-click-IDs) levend gedurende een bezoek,
 zodat je formulieren de waardes gewoon **uit de URL** kunnen uitlezen — ook
 nadat een bezoeker is doorgeklikt naar een andere pagina.
 
-Geen WordPress-plugin: dit draait als één **Google Tag Manager Custom HTML-tag**
-en werkt daardoor op elke site (WordPress, Webflow, Shopify, custom).
+Geen WordPress-plugin: dit draait in **Google Tag Manager** en werkt daardoor op
+elke site (WordPress, Webflow, Shopify, custom). Er zijn twee manieren om het te
+installeren:
+
+- **Gallery-template** (aanbevolen) — één klik vanuit de Community Template
+  Gallery. De template laadt de engine via jsDelivr.
+- **Zelfstandige Custom HTML-tag** — alle code in de tag zelf, geen externe
+  afhankelijkheid. Zie [`gtm/custom-html-tag.html`](gtm/custom-html-tag.html).
+
+Homepage: <https://hellogekko.nl/product/utm-tracker> · Licentie: Apache-2.0
 
 ## Het principe
 
@@ -34,14 +42,34 @@ vangnet voor het geval iemand een niet-gedecoreerde link volgt.
 
 ## Installeren in Google Tag Manager
 
+### Optie 1 — Gallery-template (aanbevolen)
+1. In je workspace: **Tags → New → Tag Configuration → Discover more tag types
+   in the Community Template Gallery.**
+2. Zoek **HelloGekko UTM tracker** en voeg toe aan de workspace.
+3. Stel de gewenste opties in (cookie-duur, click-IDs, debug).
+4. **Triggering:** *Initialization - All Pages*.
+5. **Consent:** *Advanced Settings → Consent Settings* — stel zelf in welke
+   consent vereist is. De template bevat met opzet geen eigen consent-logica.
+6. **Submit / Publish.**
+
+### Optie 2 — Zelfstandige Custom HTML-tag
 1. **Tags → New → Tag Configuration → Custom HTML.**
 2. Plak de volledige inhoud van [`gtm/custom-html-tag.html`](gtm/custom-html-tag.html).
-3. **Triggering:** kies *Initialization - All Pages* (draait het vroegst).
-   Niet beschikbaar? Gebruik dan *All Pages*.
-4. **Consent:** open *Advanced Settings → Consent Settings* en stel daar zelf in
-   welke consent vereist is (bijv. `ad_storage` / `analytics_storage`). De tag
-   bevat met opzet geen eigen consent-logica.
-5. **Submit / Publish.**
+3. Trigger *Initialization - All Pages*, consent zoals hierboven, publish.
+
+## De template publiceren in de Gallery
+
+De Gallery vereist een **publieke** GitHub-repo met op de `main`-branch in de root:
+`template.tpl`, `metadata.yaml`, `LICENSE` (Apache-2.0) en `README.md` — allemaal
+aanwezig in deze repo.
+
+1. Maak de repo publiek en merge deze branch naar `main`.
+2. Zet een release-tag `v0.1.0` (de jsDelivr-URL in `template.tpl` pint hierop).
+3. Importeer `template.tpl` in GTM (**Templates → New → ⋮ → Import**), test 'm en
+   accepteer in de editor de Gallery Terms of Service.
+4. Ga naar <https://tagmanager.google.com/gallery>, **Submit Template**, en geef
+   de repo-URL op. Reviews verschijnen meestal binnen 2–3 dagen.
+5. Updates: voeg een nieuwe `sha` + `changeNotes` bovenaan `metadata.yaml` toe.
 
 ## Lezen in je formulier
 
@@ -87,8 +115,11 @@ Pas het `CONFIG`-blok bovenin de tag aan:
 ## Repo-structuur
 
 ```
-src/utm-builder.js        Leesbare broncode (de waarheid)
-gtm/custom-html-tag.html  Kant-en-klaar te plakken in een GTM Custom HTML-tag
+src/utm-builder.js        Leesbare broncode / engine (de waarheid; via jsDelivr geladen)
+template.tpl              GTM Gallery-template (dunne loader die de engine inlaadt)
+metadata.yaml             Gallery-metadata (homepage, documentatie, versies)
+LICENSE                   Apache-2.0
+gtm/custom-html-tag.html  Zelfstandige variant om in een Custom HTML-tag te plakken
 docs/                     Setup- en testdocumentatie
 ```
 

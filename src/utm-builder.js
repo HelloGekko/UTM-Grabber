@@ -69,6 +69,19 @@
     debug: false
   };
 
+  // Allow a host page or the GTM template to override defaults by setting
+  // window.UTMBuilderConfig before this script runs. Derived values below are
+  // intentionally computed AFTER this merge.
+  (function (overrides) {
+    if (overrides && typeof overrides === 'object') {
+      for (var key in overrides) {
+        if (Object.prototype.hasOwnProperty.call(overrides, key) && overrides[key] !== undefined) {
+          CONFIG[key] = overrides[key];
+        }
+      }
+    }
+  })(window.UTMBuilderConfig);
+
   /* ----------------------------------------------------------------------- *
    * Small helpers
    * ----------------------------------------------------------------------- */
