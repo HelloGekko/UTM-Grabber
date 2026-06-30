@@ -1,0 +1,62 @@
+<!--
+  UTM Builder - Google Tag Manager "Custom HTML" tag
+  ==================================================
+  Paste the whole contents of this file into a Custom HTML tag.
+
+  Trigger : Initialization - All Pages   (preferred, runs earliest)
+            or "All Pages" if Initialization is not available.
+  Consent : Set this on the tag yourself via Advanced > Consent Settings.
+
+  The <script> body below is the built source from /src/utm-builder.js.
+  Edit the CONFIG block at the top to tune behaviour per container.
+-->
+<script>
+(function (window, document) {
+  'use strict';
+
+  var CONFIG = {
+    params: ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','utm_source_platform'],
+    clickIds: ['gclid','gbraid','wbraid','gad_source','fbclid','msclkid','ttclid','li_fat_id','twclid','epik','sccid','irclickid'],
+    cookieName: 'utm_builder',
+    cookieDays: 90,
+    storeFirstTouch: true,
+    decorateLinks: true,
+    decorateClickIds: false,
+    rewriteAddressBar: true,
+    watchDom: true,
+    extraDomains: [],
+    dataLayerEventName: 'utm_builder_ready',
+    debug: false
+  };
+
+  function log(){ if(CONFIG.debug && window.console && window.console.log){ window.console.log.apply(window.console,['[UTM Builder]'].concat([].slice.call(arguments))); } }
+  var ALL_KEYS = CONFIG.params.concat(CONFIG.clickIds);
+  var PROPAGATE_KEYS = CONFIG.params.concat(CONFIG.decorateClickIds ? CONFIG.clickIds : []);
+  function now(){ return (Date && Date.now) ? Date.now() : +new Date(); }
+
+  function readCookie(name){ var m=document.cookie.match('(?:^|;\\s*)'+name+'=([^;]*)'); if(!m) return null; try{ return JSON.parse(decodeURIComponent(m[1])); }catch(e){ return null; } }
+  function writeCookie(name,value,days){ var expires=''; if(days){ var d=new Date(); d.setTime(now()+days*864e5); expires='; expires='+d.toUTCString(); } var domain=rootDomain(); document.cookie=name+'='+encodeURIComponent(JSON.stringify(value))+expires+'; path=/'+(domain?'; domain='+domain:'')+'; SameSite=Lax'+(location.protocol==='https:'?'; Secure':''); }
+  function rootDomain(){ var host=location.hostname; if(/^[\d.]+$/.test(host)||host==='localhost') return ''; var parts=host.split('.'); if(parts.length<=2) return '.'+host; for(var i=parts.length-2;i>=0;i--){ var c='.'+parts.slice(i).join('.'); document.cookie='_utmb_probe=1; path=/; domain='+c; if(document.cookie.indexOf('_utmb_probe=1')!==-1){ document.cookie='_utmb_probe=; path=/; domain='+c+'; expires=Thu, 01 Jan 1970 00:00:00 GMT'; return c; } } return ''; }
+
+  function trackedParamsFrom(search){ var found={}; if(!search) return found; var q=search.charAt(0)==='?'?search.slice(1):search; var pairs=q.split('&'); for(var i=0;i<pairs.length;i++){ if(!pairs[i]) continue; var eq=pairs[i].indexOf('='); var rk=eq===-1?pairs[i]:pairs[i].slice(0,eq); var rv=eq===-1?'':pairs[i].slice(eq+1); var key=decodeURIComponent(rk).toLowerCase(); if(ALL_KEYS.indexOf(key)===-1) continue; try{ found[key]=decodeURIComponent(rv.replace(/\+/g,' ')); }catch(e){ found[key]=rv; } } return found; }
+  function isEmpty(o){ for(var k in o){ if(Object.prototype.hasOwnProperty.call(o,k)) return false; } return true; }
+
+  function captureAndStore(){ var fromUrl=trackedParamsFrom(location.search); var stored=readCookie(CONFIG.cookieName)||{first:{},last:{},first_ts:0,last_ts:0}; if(!isEmpty(fromUrl)){ stored.last=fromUrl; stored.last_ts=now(); if(CONFIG.storeFirstTouch && isEmpty(stored.first)){ stored.first=fromUrl; stored.first_ts=now(); } writeCookie(CONFIG.cookieName,stored,CONFIG.cookieDays); log('captured from URL',fromUrl); } var active=!isEmpty(fromUrl)?fromUrl:(stored.last||{}); return {active:active,stored:stored}; }
+
+  function propagateValues(active){ var out={}; for(var k in active){ if(Object.prototype.hasOwnProperty.call(active,k) && PROPAGATE_KEYS.indexOf(k)!==-1){ out[k]=active[k]; } } return out; }
+  function appendParams(u,values){ var changed=false; for(var k in values){ if(!Object.prototype.hasOwnProperty.call(values,k)) continue; if(!u.searchParams.has(k)){ u.searchParams.set(k,values[k]); changed=true; } } return changed; }
+  function rewriteAddressBar(values){ if(isEmpty(values)||!window.history||!history.replaceState||!window.URL) return; try{ var u=new URL(location.href); if(appendParams(u,values)){ history.replaceState(history.state,'',u.toString()); log('address bar rewritten',u.search); } }catch(e){ log('replaceState skipped',e); } }
+  function isInternal(host){ return host===location.host || CONFIG.extraDomains.indexOf(host)!==-1; }
+  function decorateLink(a,values){ var href=a.getAttribute('href'); if(!href) return; var l=href.toLowerCase(); if(l.charAt(0)==='#'||l.indexOf('mailto:')===0||l.indexOf('tel:')===0||l.indexOf('javascript:')===0) return; try{ var u=new URL(href,location.href); if(u.protocol!=='http:'&&u.protocol!=='https:') return; if(!isInternal(u.host)) return; if(appendParams(u,values)){ a.setAttribute('href',u.toString()); } }catch(e){} }
+  function decorateAll(values){ if(isEmpty(values)||!window.URL) return; var links=document.getElementsByTagName('a'); for(var i=0;i<links.length;i++){ decorateLink(links[i],values); } log('decorated '+links.length+' links'); }
+  function watchNewLinks(values){ if(!window.MutationObserver) return; var pending=false; var ob=new MutationObserver(function(){ if(pending) return; pending=true; (window.requestAnimationFrame||window.setTimeout)(function(){ pending=false; decorateAll(values); },0); }); ob.observe(document.documentElement,{childList:true,subtree:true}); }
+
+  function pushToDataLayer(active,stored){ window.dataLayer=window.dataLayer||[]; var p={event:CONFIG.dataLayerEventName}; var k; for(k in active){ if(Object.prototype.hasOwnProperty.call(active,k)) p[k]=active[k]; } if(CONFIG.storeFirstTouch && stored && stored.first){ for(k in stored.first){ if(Object.prototype.hasOwnProperty.call(stored.first,k)) p[k+'_1st']=stored.first[k]; } } window.dataLayer.push(p); log('dataLayer push',p); }
+
+  function onReady(fn){ if(document.readyState==='complete'||document.readyState==='interactive'){ fn(); } else { document.addEventListener('DOMContentLoaded',fn); } }
+
+  function run(){ var r=captureAndStore(); var active=r.active, stored=r.stored; var values=propagateValues(active); if(CONFIG.rewriteAddressBar) rewriteAddressBar(values); if(CONFIG.decorateLinks){ onReady(function(){ decorateAll(values); if(CONFIG.watchDom) watchNewLinks(values); }); } pushToDataLayer(active,stored); window.UTMBuilder={ get:function(){ return readCookie(CONFIG.cookieName); }, active:function(){ return active; }, config:CONFIG }; }
+
+  run();
+})(window, document);
+</script>
