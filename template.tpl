@@ -1,9 +1,9 @@
-___TERMS_OF_SERVICE___
+﻿___TERMS_OF_SERVICE___
 
 By creating or modifying this file you agree to Google Tag Manager's Community
 Template Gallery Developer Terms of Service available at
-https://developers.google.com/tag-manager/gallery-tos (the "Gallery TOS") and
-the Google API Services User Data Policy.
+https://developers.google.com/tag-manager/gallery-tos (or such other URL as
+Google may provide), as modified from time to time.
 
 
 ___INFO___
@@ -14,7 +14,11 @@ ___INFO___
   "version": 1,
   "securityGroups": [],
   "displayName": "HelloGekko UTM tracker",
-  "categories": ["ANALYTICS", "MARKETING", "UTILITY"],
+  "categories": [
+    "ANALYTICS",
+    "MARKETING",
+    "UTILITY"
+  ],
   "brand": {
     "id": "hellogekko",
     "displayName": "HelloGekko",
@@ -33,7 +37,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "LABEL",
     "name": "intro",
-    "displayName": "Keeps UTM parameters in the URL across navigation so forms can read them as URL parameters. The engine is loaded from jsDelivr (cdn.jsdelivr.net). Set the tag to fire on 'Initialization - All Pages' and configure consent in the tag's Consent Settings."
+    "displayName": "Keeps UTM parameters in the URL across navigation so forms can read them as URL parameters. The engine is loaded from jsDelivr (cdn.jsdelivr.net). Set the tag to fire on \u0027Initialization - All Pages\u0027 and configure consent in the tag\u0027s Consent Settings."
   },
   {
     "type": "TEXT",
@@ -219,3 +223,5 @@ touch the DOM, so it injects the open-source engine (src/utm-builder.js) from
 jsDelivr, which performs URL capture, first-party cookie storage, link
 decoration, address-bar rewriting and the dataLayer push. Consent is left to the
 tag's own Consent Settings on purpose.
+
+
