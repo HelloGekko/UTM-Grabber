@@ -4,5 +4,5 @@ documentation: "https://github.com/HelloGekko/UTM-Grabber/blob/main/README.md"
 # you want published (this one includes the branding icon). If a later commit
 # changes template.tpl, add a new entry on top with that commit's sha.
 versions:
-  - sha: e81762b22233191dd9728b697da300e503dc091a
+  - sha: ce18252eda93d5331bbe87d933b9a88c83136ab2
     changeNotes: Initial release. Captures UTM parameters and ad click IDs, stores first- and last-touch in a first-party cookie, keeps the parameters in the URL via link decoration and address-bar rewriting, and pushes values to the dataLayer.
