@@ -1,8 +1,8 @@
 homepage: "https://hellogekko.nl/product/utm-tracker"
 documentation: "https://github.com/HelloGekko/UTM-Grabber/blob/main/README.md"
 # NOTE: each `sha` must point to the commit containing the template.tpl version
-# you want published. After merging to `main`, update this to the final main
-# commit hash before submitting to the gallery.
+# you want published (this one includes the branding icon). If a later commit
+# changes template.tpl, add a new entry on top with that commit's sha.
 versions:
-  - sha: 1c77353022e0856eb45bf55b2aa191915d246f7b
+  - sha: e81762b22233191dd9728b697da300e503dc091a
     changeNotes: Initial release. Captures UTM parameters and ad click IDs, stores first- and last-touch in a first-party cookie, keeps the parameters in the URL via link decoration and address-bar rewriting, and pushes values to the dataLayer.
