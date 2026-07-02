@@ -1,4 +1,4 @@
-___INFO___
+﻿___INFO___
 
 {
   "type": "TAG",
@@ -414,3 +414,5 @@ DOM, keeping the parameters in the URL (address bar + internal links) is done by
 tiny companion script (dist/url-keeper.min.js) loaded from a configurable URL,
 pinned to jsDelivr by default and self-hostable when a site blocks external
 scripts. Consent is left to the tag Consent Settings.
+
+
